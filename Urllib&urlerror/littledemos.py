@@ -8,10 +8,16 @@ import  urllib.request
 # opener.addheaders = [headers]
 # data=opener.open(url).read()
 # print(data)
-for i in range(1,100):
-    try:
-        file = urllib.request.urlopen("http://yum.iqianyue.com",timeout=1)
-        data=file.read()
-        print(len(data))
-    except:
-        print("---出现一场----")
+# for i in range(1,100):
+#     try:
+#         file = urllib.request.urlopen("http://yum.iqianyue.com",timeout=1)
+#         data=file.read()
+#         print(len(data))
+#     except:
+#         print("---出现一场----")
+import re
+
+pat = '123435//.+?\.jpggg'
+red = re.compile(pat).findall('123435//gg.jpggg')
+print(red)
+
