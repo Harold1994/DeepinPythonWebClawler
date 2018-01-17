@@ -17,7 +17,11 @@ import  urllib.request
 #         print("---出现一场----")
 import re
 
-pat = '123435//.+?\.jpggg'
-red = re.compile(pat).findall('123435//gg.jpggg')
-print(red)
+# pat = '123435//.+?\.jpggg'
+# red = re.compile(pat).findall('123435//gg.jpggg')
+# print(red)
 
+content_pat = 'id="js_content">(.*?)<div class="rich_media_tool" id="js_sg_bar">'
+txt =' "<div class="rich_media_content " id="js_content">cdscedcfeg\nrvf3237832hjcbewxdsnckjd<div class="rich_media_tool" id="js_sg_bar">'
+data = re.compile(content_pat,re.S).findall(txt)
+print(data)

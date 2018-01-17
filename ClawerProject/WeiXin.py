@@ -4,7 +4,7 @@ import urllib.error
 import time
 
 headers = ('User-Agent', "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 \
-                (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36")
+        (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36")
 opener = urllib.request.build_opener()
 opener.addheaders = [headers]
 urllib.request.install_opener(opener)
@@ -14,10 +14,10 @@ listurl = []
 def use_proxy(proxy_addr, url):
     try:
         import urllib.request
-        proxy = urllib.request.ProxyHandler({'http': proxy_addr})
+        proxy = urllib.request.ProxyHandler({'https': proxy_addr})
         opener = urllib.request.build_opener(proxy, urllib.request.HTTPHandler)
         urllib.request.install_opener(opener)
-        data = urllib.request.urlopen(url).read().encode('utf-8')
+        data = urllib.request.urlopen(url).read().decode('utf-8')
         return data
     except urllib.error.URLError as e:
         if hasattr(e, 'code'):
@@ -34,9 +34,9 @@ def getlisturl(key, pagestart, pageend, proxy):
     try:
         page = pagestart
         keycode = urllib.request.quote(key)
-        pagecode = urllib.request.quote("&page")
+        pagecode = urllib.request.quote("&")
         for page in range(pagestart, pageend + 1):
-            url = 'http://weixin.sogou.com/weixin?type=2&query=' + keycode + pagecode + str(page)
+            url = 'http://weixin.sogou.com/weixin?type=2&query=' + keycode+"&page="+str(page)
             data1 = use_proxy(proxy, url)
             listurlpat = '<div class="txt-box">.*?(http://.*?)"'
             listurl.append(re.compile(listurlpat, re.S).findall(data1))
@@ -71,12 +71,12 @@ def getcontent(listurl, proxy):
         for j in range(0, len(listurl[i])):
             try:
                 url = listurl[i][j]
-                url = url.replace("amp", '')
+                url = url.replace("amp;", '')
                 data = use_proxy(proxy, url)
                 title_pat = "<title>(.*?)</title>"
-                content_pat = 'id="js_content">(.*?)id="js_sg_bar"'
+                content_pat = 'id="js_content">(.*?)<div class="rich_media_tool" id="js_sg_bar">'
                 title = re.compile(title_pat).findall(data)
-                content = re.compile(content_pat).findall(data)
+                content = re.compile(content_pat,re.S).findall(data)
                 thistitle = "None Title"
                 thiscontent = "None_Content"
                 if (title != []):
@@ -98,15 +98,17 @@ def getcontent(listurl, proxy):
     fh.close()
     html2 = '''</body>
     </html>'''
-    fh = open("D:/DeepinPythonWebClawler/1.html", 'wb')
+    fh = open("D:/DeepinPythonWebClawler/1.html", 'ab')
     fh.write(html2.encode("utf-8"))
     fh.close()
 
 
-key = "物联网"
-proxy = "115.61.252.255:8118"
-proxy2 = ""
+key = "spark"
+proxy = "140.143.96.141:80"
+proxy2 = "61.155.164.110:3128"
 pagestart = 1
-pagend = 2
+pagend = 10
 listurl = getlisturl(key, pagestart, pagend, proxy)
+print(listurl)
 getcontent(listurl, proxy)
+
