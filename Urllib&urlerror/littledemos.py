@@ -20,8 +20,26 @@ import re
 # pat = '123435//.+?\.jpggg'
 # red = re.compile(pat).findall('123435//gg.jpggg')
 # print(red)
+import http.cookiejar
+url = "http://news.163.com/18/0116/21/D8A60K2T000189FH.html"
+headers = { 'Connection': 'keep-alive',
+            'User-Agent': "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, "
+                          "like Gecko)Chrome/63.0.3239.132 Safari/537.36",
+            'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
+            'Referer': 'http://tpc.googlesyndication.com/safeframe/1-0-14/html/container.html?n=1',
+            'Accept-Language': "zh-CN,zh;q=0.9"}
 
-content_pat = 'id="js_content">(.*?)<div class="rich_media_tool" id="js_sg_bar">'
-txt =' "<div class="rich_media_content " id="js_content">cdscedcfeg\nrvf3237832hjcbewxdsnckjd<div class="rich_media_tool" id="js_sg_bar">'
-data = re.compile(content_pat,re.S).findall(txt)
-print(data)
+cjar = http.cookiejar.CookieJar()
+proxy = urllib.request.ProxyHandler({'http': '127.0.0.1:8888'})
+opener = urllib.request.build_opener(proxy,urllib.request.HTTPHandler,urllib.request.HTTPCookieProcessor(cjar))
+headall = []
+for key,value in headers.items():
+    item=(key,value)
+    headall.append(item)
+opener.addheaders = headall
+urllib.request.install_opener(opener)
+data = urllib.request.urlopen(url).read()
+fhandle = open('D:/DeepinPythonWebClawler/2.html','wb')
+fhandle.write(data)
+fhandle.close()
+
