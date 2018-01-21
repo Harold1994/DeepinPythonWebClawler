@@ -8,8 +8,7 @@
 import scrapy
 
 
-class QtpjtItem(scrapy.Item):
+class LoginpjtItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    picurl = scrapy.Field()
-    picid  = scrapy.Field()
+    pass
